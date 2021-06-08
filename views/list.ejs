@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+    <title>nodejs & MongoDB</title>
+  </head>
+  <body>
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+    
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Todo App</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="write.html">Write</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">List</a>
+            </li>
+            
+          </ul>
+        </div>
+      </nav>
+
+      <!-- 서버에서 가져온 할 일 리스트 -->
+      <!-- EJS 라이브러리 활용 -->
+      <% for(var i = 0; i < list.length; i++) { %>
+      <li class="list-group-item list-group-item-light">
+      <h4><%= i + 1 %>. TITLE : <%= list[i].title %></h4>  
+      <p>DATE : <%= list[i].date %></p>
+      <button class="deleteBtn btn btn-dark" data-id="<%= list[i]._id %>">DELETE</button>
+      </li>
+      <!-- 삭제요청을 할 때 쓸 수 있는 3가지 방법 -->
+      <!-- 
+        1. method-override 라이브러리의 도움을 받는다
+        2. AJAX로 DELETE 요청을 날린다 
+        3. 그냥 POST요청을 날려서 DELETE 작업을 수행한다 
+            Restful한 API를 위해 AJAX 사용 권장
+      -->
+      <% } %>
+
+      <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+      <script>
+        // Ajax DELETE request
+        $('.deleteBtn').click(function(e){
+          var id = e.target.dataset.id;
+          
+          console.log(id);
+
+            $.ajax({
+            method: 'DELETE',
+            url: '/delete',
+            data: {_id : id}
+          }).done((result) => {
+            console.log('ajax result',result);
+            $(this).parent().fadeOut();
+          }).fail((error) => {
+            console.log(error)
+          });
+        });
+      </script>
+
+      
+  </body>
+</html>
+
+<!-- Ajax란
+프론트엔드에서 JavaScript를 이용해 서버에 여러가지 요청을 할 수 있는 문법 
+새로고침 없이도 서버에 몰래몰래 요청 
+새로고침이 없는 스무스한 사이트를 만들고 싶으면 많은 요청을 AJAX 문법을 이용해 처리 -->
