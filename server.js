@@ -2,9 +2,9 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
-app.use(bodyParser.urlencoded({extended: true})) 
+app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs'); 
-const methodOverride = require('method-override')
+const methodOverride = require('method-override');
 app.use(methodOverride('_method'))
 const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
@@ -29,11 +29,9 @@ MongoClient.connect('mongodb+srv://lexie:coldplay7878@cluster0.znjtj.mongodb.net
 
     db = client.db('todoApp');  // todoApp이라는 database에 연결좀요
 
-    // db.collection('post').insertOne({name: 'Lexie', age:27}, function(error, result){
-    //     console.log('SUCCESS!');    // post라는 파일에 insertOne{자료}
-    // });
-
-    
+    db.collection('post').insertOne({name: 'Lexie', age:27}, function(error, result){
+        console.log('SUCCESS!');    // post라는 파일에 insertOne{자료}
+    });
 
     // 서버띄우는 코드 여기로 옮기기
     app.listen('3002', function(){
@@ -151,33 +149,33 @@ app.post('/login',
     res.redirect("/");
 })
 
-passport.use(new LocalStrategy({
-    usernameField: 'id',    
-    passwordField: 'pw',    // -> 유저가 입력한 아이디/비번 항목이 뭔지 정의(name속성)
-    session: true,
-    passReqToCallback: false,   // -> 로그인 후 세션을 저장할것인지 참거짓여부 저장
-  }, function (_id, _pw, done) {    // 입력한 아이디, 입력한 비번
-    //console.log(_id, _pw);
-    db.collection('login').findOne({ id: _id }, function (error, result) {
-      if (error) return done(error)
+// passport.use(new LocalStrategy({
+//     usernameField: 'id',    
+//     passwordField: 'pw',    // -> 유저가 입력한 아이디/비번 항목이 뭔지 정의(name속성)
+//     session: true,
+//     passReqToCallback: false,   // -> 로그인 후 세션을 저장할것인지 참거짓여부 저장
+//   }, function (_id, _pw, done) {    // 입력한 아이디, 입력한 비번
+//     //console.log(_id, _pw);
+//     db.collection('login').findOne({ id: _id }, function (error, result) {
+//       if (error) return done(error)
   
-      if (!result) return done(null, false, { message: '존재하지 않는 아이디요' })
-      if (_pw == result.pw) {
-        return done(null, result)
-      } else {
-        return done(null, false, { message: '비번 틀렸어요' })
-        // done(서버에러,성공시 사용자 DB 데이터, 에러메세지) 
-      }
-    })
-  }));
+//       if (!result) return done(null, false, { message: '존재하지 않는 아이디요' })
+//       if (_pw == result.pw) {
+//         return done(null, result)
+//       } else {
+//         return done(null, false, { message: '비번 틀렸어요' })
+//         // done(서버에러,성공시 사용자 DB 데이터, 에러메세지) 
+//       }
+//     })
+//   }));
 
   // 세션데이터를 만들고 세션아이디를 만들어 보내주는 것도 라이브러리 도움
-  passport.serializeUser(function (user, done) {
-    done(null, user.id)
-  });
-  // serializeUser
-  // 유저의 id 데이터를 바탕으로 세션데이터를 만들어주고
-  // 그 세션데이터의 아이디를 쿠키로 만들어서 사용자의 브라우저로 보내줌
-  passport.deserializeUser(function (아이디, done) {
-    done(null, {})
-  }); 
+//   passport.serializeUser(function (user, done) {
+//     done(null, user.id)
+//   });
+//   // serializeUser
+//   // 유저의 id 데이터를 바탕으로 세션데이터를 만들어주고
+//   // 그 세션데이터의 아이디를 쿠키로 만들어서 사용자의 브라우저로 보내줌
+//   passport.deserializeUser(function (아이디, done) {
+//     done(null, {})
+//   }); 
